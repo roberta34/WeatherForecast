@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +22,14 @@ public class CityRepository {
         List<City> cities = new ArrayList<>();
 
         String sql = """
-                SELECT c.id,
-                       c.name,
-                       co.name AS country,
-                       c.population
-                FROM cities c
-                JOIN countries co
-                ON c.country_id = co.id
+                 SELECT c.id,
+                        c.name,
+                        co.name AS country,
+                        c.population
+                        FROM cities c
+                        JOIN countries co
+                        ON c.country_id = co.id
+                        ORDER BY c.name
                 """;
 
         try (
@@ -60,8 +62,11 @@ public class CityRepository {
                 cities.add(city);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Failed to fetch cities",
+                    e
+            );
         }
         return cities;
     }
