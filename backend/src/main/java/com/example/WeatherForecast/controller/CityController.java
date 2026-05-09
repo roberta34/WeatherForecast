@@ -1,11 +1,15 @@
 package com.example.WeatherForecast.controller;
 
+import com.example.WeatherForecast.dto.response.ApiResponse;
+import com.example.WeatherForecast.model.City;
 import com.example.WeatherForecast.service.CityService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/cities")
@@ -15,7 +19,13 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping
-    public Object getCities() {
-        return cityService.getAllCities();
+    public ApiResponse<List<City>> getCities() {
+        List<City> cities = cityService.getAllCities();
+
+        return new ApiResponse<>(
+                "success",
+                cities,
+                "Cities fetched successfully"
+        );
     }
 }

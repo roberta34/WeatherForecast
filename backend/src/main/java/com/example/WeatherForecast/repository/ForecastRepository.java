@@ -67,7 +67,7 @@ public class ForecastRepository {
                         );
 
                         forecast.setWindSpeed(
-                                resultSet.getInt("humidity")
+                                resultSet.getInt("wind_speed")
                         );
 
                         forecast.setUvIndex(
