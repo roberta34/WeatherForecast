@@ -6,23 +6,23 @@ export default function ForecastCard({ forecast }) {
           </h3>
 
           <p>
-              Temperatura minimă: {forecast.minTemperature}°C
+              Min Temperature: {forecast.minTemperature}°C
           </p>
 
           <p>
-              Temperatura maximă: {forecast.maxTemperature}°C
+              Max Temperature: {forecast.maxTemperature}°C
           </p>
 
           <p>
-              Vânt: {forecast.windSpeed} km/h
+              Wind: {forecast.windSpeed} km/h
           </p>
 
           <p>
-              Umiditate: {forecast.humidity}%
+              Humidity: {forecast.humidity}%
           </p>
 
           <p>
-              Vreme: {forecast.weatherType}
+              Weather: {forecast.weatherType}
           </p>
       </div>
     );
