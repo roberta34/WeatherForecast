@@ -155,26 +155,34 @@ $$LANGUAGE plpgsql;
 ---procedura pt statistici orase
 CREATE OR REPLACE PROCEDURE generate_city_statistics()
 AS $$
-    BEGIN
-        DELETE FROM city_statistics;
+BEGIN
 
-        INSERT INTO city_statistics (city_id,
-                                     average_temperature,
-                                     min_temperature,
-                                     max_temperature,
-                                     average_humidity,
-                                     average_wind_speed
-        )
-        SELECT
-            city_id,
-            AVG((temperature_min + temperature_max) / 2.0),
-            MIN(temperature_min),
-            MAX(temperature_max),
-            AVG(humidity),
-            AVG(wind_speed)
-        FROM weather_forecasts
-        GROUP BY city_id;
-    END;
+    DELETE FROM city_statistics;
+
+    INSERT INTO city_statistics (
+        city_id,
+        average_temperature,
+        min_temperature,
+        max_temperature,
+        average_humidity,
+        average_wind_speed,
+        generated_at
+    )
+
+    SELECT
+        city_id,
+        AVG((temperature_min + temperature_max) / 2.0),
+        MIN(temperature_min),
+        MAX(temperature_max),
+        AVG(humidity),
+        AVG(wind_speed),
+        NOW()
+
+    FROM weather_forecasts
+
+    GROUP BY city_id;
+
+END;
 $$ LANGUAGE plpgsql;
 
 
