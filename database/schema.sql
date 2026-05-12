@@ -67,3 +67,51 @@ CREATE TABLE weather_alerts (
                             REFERENCES cities(id)
                             ON DELETE CASCADE
 );
+
+
+CREATE TABLE city_statistics (
+                                 id SERIAL PRIMARY KEY,
+                                 city_id INT NOT NULL REFERENCES cities(id),
+                                 average_temperature NUMERIC(5,2),
+                                 min_temperature NUMERIC(5,2),
+                                 max_temperature NUMERIC(5,2),
+                                 average_humidity NUMERIC(5,2),
+                                 average_wind_speed NUMERIC(5,2),
+                                 generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE seasonal_analysis (
+                                   id SERIAL PRIMARY KEY,
+                                   city_id INT NOT NULL REFERENCES cities(id),
+                                   season VARCHAR(20) NOT NULL,
+                                   average_temperature NUMERIC(5,2),
+                                   min_temperature NUMERIC(5,2),
+                                   max_temperature NUMERIC(5,2),
+                                   average_humidity NUMERIC(5,2),
+                                   generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE city_rankings (
+                               id SERIAL PRIMARY KEY,
+                               city_id INT NOT NULL REFERENCES cities(id),
+                               ranking_type VARCHAR(50) NOT NULL,
+                               ranking_position INT NOT NULL,
+                               score NUMERIC(6,2),
+                               generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE weather_anomalies (
+                                   id SERIAL PRIMARY KEY,
+                                   city_id INT NOT NULL REFERENCES cities(id),
+                                   forecast_id INT REFERENCES weather_forecasts(id),
+                                   anomaly_type VARCHAR(50),
+                                   description TEXT,
+                                   detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE weather_forecasts
+    RENAME COLUMN date TO forecast_date;
