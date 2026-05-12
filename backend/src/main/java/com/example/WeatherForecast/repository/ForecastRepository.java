@@ -25,7 +25,7 @@ public class ForecastRepository {
                 SELECT *
                 FROM weather_forecasts
                 WHERE city_id = ?
-                ORDER BY date
+                ORDER BY forecast_date
                 """;
 
         try (
