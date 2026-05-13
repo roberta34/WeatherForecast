@@ -112,6 +112,21 @@ CREATE TABLE weather_anomalies (
                                    detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE comments (
+                                    id SERIAL PRIMARY KEY,
+                                    user_id INT NOT NULL,
+                                    city_id INT NOT NULL,
+                                    comment_text TEXT NOT NULL,
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-ALTER TABLE weather_forecasts
-    RENAME COLUMN date TO forecast_date;
+                                    CONSTRAINT fk_comment_user
+                                        FOREIGN KEY (user_id)
+                                        REFERENCES users(id)
+                                        ON DELETE CASCADE,
+
+                                    CONSTRAINT fk_comment_city
+                                        FOREIGN KEY (city_id)
+                                        REFERENCES cities(id)
+                                        ON DELETE CASCADE
+);
+
