@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class CityRanking {
     private Integer id;
     private Integer cityId;
+    private String cityName;
     private String rankingType;
     private Integer rankingPosition;
     private Double score;
