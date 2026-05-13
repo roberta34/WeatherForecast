@@ -130,3 +130,25 @@ CREATE TABLE comments (
                                         ON DELETE CASCADE
 );
 
+CREATE TABLE ratings (
+
+                         id SERIAL PRIMARY KEY,
+
+                         user_id INT NOT NULL,
+
+                         city_id INT NOT NULL,
+
+                         rating_value INT NOT NULL CHECK (rating_value BETWEEN 1 AND 5),
+
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+                         CONSTRAINT fk_rating_user
+                             FOREIGN KEY (user_id)
+                                 REFERENCES users(id)
+                                 ON DELETE CASCADE,
+
+                         CONSTRAINT fk_rating_city
+                             FOREIGN KEY (city_id)
+                                 REFERENCES cities(id)
+                                 ON DELETE CASCADE
+);
