@@ -18,10 +18,7 @@ import java.util.List;
 @RequestMapping("/api/statistics")
 @AllArgsConstructor
 
-@Tag(
-        name = "Statistics",
-        description =  "API for forecast statistics"
-)
+@Tag(name = "Statistics")
 public class StatisticsController {
     private final StatisticsService statisticsService;
 
