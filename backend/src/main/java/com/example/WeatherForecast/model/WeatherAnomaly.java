@@ -16,6 +16,8 @@ public class WeatherAnomaly {
 
     private Integer cityId;
 
+    private String cityName;
+
     private Integer forecastId;
 
     private String anomalyType;

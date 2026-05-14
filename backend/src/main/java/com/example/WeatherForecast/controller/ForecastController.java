@@ -5,6 +5,7 @@ import com.example.WeatherForecast.dto.response.ApiResponse;
 import com.example.WeatherForecast.model.Forecast;
 import com.example.WeatherForecast.repository.ForecastRepository;
 import com.example.WeatherForecast.service.ForecastService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("api/forecast")
 @CrossOrigin("*")
 @AllArgsConstructor
+@Tag(name = "Forecasts")
 public class ForecastController {
     private final ForecastService forecastService;
 
