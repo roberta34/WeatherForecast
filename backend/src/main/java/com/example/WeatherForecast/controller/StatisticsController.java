@@ -54,4 +54,5 @@ public class StatisticsController {
                 "City statistics fetched successfully"
         );
     }
+
 }

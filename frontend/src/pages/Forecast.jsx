@@ -38,7 +38,8 @@ export default function Forecast() {
 
         setSelectedCity(cityId);
 
-        if(!cityId) {
+        if (!cityId) {
+            setForecasts([]);
             return;
         }
 

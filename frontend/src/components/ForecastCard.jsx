@@ -2,7 +2,7 @@ export default function ForecastCard({ forecast }) {
     return (
       <div className={"forecast-card"}>
           <h3>
-              {forecast.date}
+              {forecast.forecastDate}
           </h3>
 
           <p>
@@ -23,6 +23,10 @@ export default function ForecastCard({ forecast }) {
 
           <p>
               Weather: {forecast.weatherType}
+          </p>
+
+          <p>
+              UV Index: {forecast.uvIndex}
           </p>
       </div>
     );
