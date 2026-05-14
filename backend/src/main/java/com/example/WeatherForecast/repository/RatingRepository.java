@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.Rating;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +40,12 @@ public class RatingRepository {
             preparedStatement.setInt(2, cityId);
             preparedStatement.setInt(3, ratingValue);
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to add rating",
+                    e
+            );
         }
     }
 
@@ -107,8 +113,12 @@ public class RatingRepository {
                 );
                 ratings.add(rating);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to add rating",
+                    e
+            );
         }
         return ratings;
     }
