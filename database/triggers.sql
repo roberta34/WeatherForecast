@@ -5,7 +5,7 @@ RETURNS TRIGGER AS $$
         IF NEW.temperature_max >= 40 THEN
             INSERT INTO weather_alerts (city_id, alert_type, description, severity)
             VALUES (NEW.city_id, 'heat', 'High temperature detected', 'high');
-        ELSEIF NEW.temperature_max >= 35 THEN
+        ELSIF NEW.temperature_max >= 35 THEN
             INSERT INTO weather_alerts (city_id, alert_type, description, severity, created_at)
             VALUES (
                     NEW.city_id,
@@ -16,7 +16,7 @@ RETURNS TRIGGER AS $$
         END IF;
 
         IF NEW.temperature_min <= -15 THEN
-            INSERT INTO weather_alerts (id, city_id, alert_type, description, severity, created_at)
+            INSERT INTO weather_alerts (city_id, alert_type, description, severity, created_at)
             VALUES (
                     NEW.city_id,
                     'EXTREME_COLD',

@@ -62,6 +62,7 @@ public class AlertRepository {
 
                     alert.setCreatedAt(
                             resultSet.getString("created_at")
+                                    .toLocalDateTime();
                     );
 
                     alerts.add(alert);

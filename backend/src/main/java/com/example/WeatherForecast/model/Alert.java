@@ -10,5 +10,5 @@ public class Alert {
     private String type;
     private String message;
 
-    private String createdAt;
+    private LocalDateTime createdAt;
 }

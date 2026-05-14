@@ -165,6 +165,7 @@ CREATE TABLE comments
             ON DELETE CASCADE
 );
 
+
 CREATE TABLE forecast_logs (
                                id SERIAL PRIMARY KEY,
 
@@ -186,3 +187,6 @@ CREATE TABLE forecast_logs (
 
                                changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE weather_forecasts
+    RENAME COLUMN date TO forecast_date;
