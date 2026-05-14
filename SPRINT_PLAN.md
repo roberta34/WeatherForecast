@@ -310,7 +310,7 @@ Transformarea aplicației într-un sistem complet.
 
 ---
 
-## ✅ Sprint 2 Outcome
+## Sprint 2 Outcome
 
 - aplicație completă
 - UI modern
