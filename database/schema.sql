@@ -190,3 +190,5 @@ CREATE TABLE forecast_logs (
 
 ALTER TABLE weather_forecasts
     RENAME COLUMN date TO forecast_date;
+
+UPDATE weather_forecasts SET temperature_max = 41 WHERE city_id = 1;

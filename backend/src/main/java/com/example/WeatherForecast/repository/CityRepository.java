@@ -2,7 +2,6 @@ package com.example.WeatherForecast.repository;
 
 import com.example.WeatherForecast.model.City;
 import lombok.AllArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

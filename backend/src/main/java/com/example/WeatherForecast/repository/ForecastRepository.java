@@ -84,7 +84,7 @@ public class ForecastRepository {
 
                         forecast.setForecastDate(
                                 resultSet.getString(
-                                        "date"
+                                        "forecast_date"
                                 )
                         );
 

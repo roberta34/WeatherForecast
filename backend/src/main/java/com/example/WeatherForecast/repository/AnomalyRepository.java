@@ -2,7 +2,6 @@ package com.example.WeatherForecast.repository;
 
 import com.example.WeatherForecast.model.WeatherAnomaly;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

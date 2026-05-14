@@ -2,6 +2,8 @@ package com.example.WeatherForecast.model;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class Alert {
     private int id;

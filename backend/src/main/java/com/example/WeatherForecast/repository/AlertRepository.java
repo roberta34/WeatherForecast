@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 @AllArgsConstructor
 @Repository
@@ -61,8 +60,8 @@ public class AlertRepository {
                     );
 
                     alert.setCreatedAt(
-                            resultSet.getString("created_at")
-                                    .toLocalDateTime();
+                            resultSet.getTimestamp("created_at")
+                                    .toLocalDateTime()
                     );
 
                     alerts.add(alert);
