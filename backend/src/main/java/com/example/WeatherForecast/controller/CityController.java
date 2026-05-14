@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cities")
+@RequestMapping("/api/cities")
 @CrossOrigin("*")
 @AllArgsConstructor
 @Tag(name = "Cities")

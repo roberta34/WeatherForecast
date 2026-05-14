@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.WeatherAnomaly;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,11 @@ public class AnomalyRepository {
                         ){
             preparedStatement.execute();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Failed to detect anomalies",
+                    e
+            );
         }
     }
 
@@ -92,8 +97,11 @@ public class AnomalyRepository {
 
                 anomalies.add(anomaly);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DatabaseException(
+                    "Failed to detect anomalies",
+                    e
+            );
         }
         return anomalies;
     }

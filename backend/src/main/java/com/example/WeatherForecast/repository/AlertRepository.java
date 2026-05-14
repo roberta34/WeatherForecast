@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.Alert;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -61,8 +62,8 @@ public class AlertRepository {
                     );
 
                     alert.setCreatedAt(
-                            resultSet.getString("created_at")
-                                    .toLocalDateTime();
+                            resultSet.getTimestamp("created_at")
+                                    .toLocalDateTime()
                     );
 
                     alerts.add(alert);
@@ -70,7 +71,7 @@ public class AlertRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(
+            throw new DatabaseException(
                     "Failed to fetch alerts",
                     e
             );

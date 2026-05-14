@@ -1,6 +1,7 @@
 package com.example.WeatherForecast.controller;
 
 
+import com.example.WeatherForecast.dto.response.ApiResponse;
 import com.example.WeatherForecast.model.CityStatistics;
 import com.example.WeatherForecast.service.StatisticsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,20 +25,33 @@ public class StatisticsController {
 
     @GetMapping
     @Operation(
-            summary = "Returns all the statistics"
+            summary = "Returns all statistics"
     )
-    public List<CityStatistics> getAllStatistics() {
-        return statisticsService.getAllStatistics();
+    public ApiResponse<List<CityStatistics>>
+    getAllStatistics() {
+
+        return new ApiResponse<>(
+                "success",
+                statisticsService.getAllStatistics(),
+                "Statistics fetched successfully"
+        );
     }
 
-    @GetMapping("/{cityId}")
 
+    @GetMapping("/{cityId}")
     @Operation(
-            summary = "Returns all the statistics of a city"
+            summary = "Returns statistics for a city"
     )
-    public CityStatistics getStatisticsByCityId(
+    public ApiResponse<CityStatistics>
+    getStatisticsByCityId(
             @PathVariable Integer cityId
-            ) {
-        return statisticsService.getStatisticsByCityId(cityId);
+    ) {
+
+        return new ApiResponse<>(
+                "success",
+                statisticsService
+                        .getStatisticsByCityId(cityId),
+                "City statistics fetched successfully"
+        );
     }
 }
