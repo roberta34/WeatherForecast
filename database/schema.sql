@@ -103,31 +103,29 @@ CREATE TABLE city_rankings (
 );
 
 
+
 CREATE TABLE weather_anomalies (
                                    id SERIAL PRIMARY KEY,
-                                   city_id INT NOT NULL REFERENCES cities(id),
-                                   forecast_id INT REFERENCES weather_forecasts(id),
+
+                                   city_id INT NOT NULL,
+
+                                   forecast_id INT,
+
                                    anomaly_type VARCHAR(50),
+
                                    description TEXT,
-                                   detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
-CREATE TABLE comments (
-                                    id SERIAL PRIMARY KEY,
-                                    user_id INT NOT NULL,
-                                    city_id INT NOT NULL,
-                                    comment_text TEXT NOT NULL,
-                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                   detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                                    CONSTRAINT fk_comment_user
-                                        FOREIGN KEY (user_id)
-                                        REFERENCES users(id)
-                                        ON DELETE CASCADE,
+                                   CONSTRAINT fk_anomaly_city
+                                       FOREIGN KEY (city_id)
+                                           REFERENCES cities(id)
+                                           ON DELETE CASCADE,
 
-                                    CONSTRAINT fk_comment_city
-                                        FOREIGN KEY (city_id)
-                                        REFERENCES cities(id)
-                                        ON DELETE CASCADE
+                                   CONSTRAINT fk_anomaly_forecast
+                                       FOREIGN KEY (forecast_id)
+                                           REFERENCES weather_forecasts(id)
+                                           ON DELETE CASCADE
 );
 
 CREATE TABLE ratings (
@@ -151,4 +149,40 @@ CREATE TABLE ratings (
                              FOREIGN KEY (city_id)
                                  REFERENCES cities(id)
                                  ON DELETE CASCADE
+);
+
+CREATE TABLE comments
+(
+    id           SERIAL PRIMARY KEY,
+    user_id      INT  NOT NULL,
+    city_id      INT  NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_comment_user
+        FOREIGN KEY (user_id)
+            REFERENCES users (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE forecast_logs (
+                               id SERIAL PRIMARY KEY,
+
+                               forecast_id INT,
+
+                               operation_type TEXT,
+
+                               old_temperature_min FLOAT,
+                               new_temperature_min FLOAT,
+
+                               old_temperature_max FLOAT,
+                               new_temperature_max FLOAT,
+
+                               old_humidity FLOAT,
+                               new_humidity FLOAT,
+
+                               old_wind_speed FLOAT,
+                               new_wind_speed FLOAT,
+
+                               changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -56,7 +56,7 @@ INSERT INTO users (username, email, password_hash) VALUES
 
 ---weather forecasts
 INSERT INTO weather_forecasts
-(city_id, date, temperature_min, temperature_max, humidity, wind_speed, uv_index, weather_type)
+(city_id, forecast_date, temperature_min, temperature_max, humidity, wind_speed, uv_index, weather_type)
 VALUES
     (1, '2025-05-01', 10, 20, 60, 10, 5, 'sunny'),
     (2, '2025-05-01', 12, 22, 65, 8, 6, 'cloudy'),
@@ -73,7 +73,6 @@ VALUES
     (13, '2025-05-01', 6, 15, 78, 15, 3, 'rain'),
     (14, '2025-05-01', 5, 14, 80, 16, 2, 'snow'),
     (15, '2025-05-01', 7, 16, 75, 13, 3, 'cloudy');
-
 
 
 ---weather alerts

@@ -19,11 +19,65 @@ END;
 $$ LANGUAGE plpgsql;
 
 --calculam indexul UV
-CREATE OR REPLACE FUNCTION calculate_uv(temp FLOAT, humidity FLOAT)
+CREATE OR REPLACE FUNCTION calculate_uv(
+    temp FLOAT,
+    humidity FLOAT,
+    wind_speed FLOAT,
+    cloud_cover FLOAT,
+    season TEXT
+)
 RETURNS  FLOAT AS $$
+DECLARE
+    uv FLOAT;
+    season_bonus FLOAT := 0;
 BEGIN
-    RETURN temp * 0.1 + (100 - humidity) * 0.05;
-end;
+
+    IF season = 'SUMMER' THEN
+        season_bonus := 3;
+    ELSIF season = 'SPRING' THEN
+        season_bonus := 1.5;
+    ELSIF season = 'AUTUMN' THEN
+        season_bonus := 0.5;
+    ELSE
+        season_bonus := -1;
+    END IF;
+
+    uv :=   temp * 0.12 +
+            (100 - humidity) * 0.03 +
+            wind_speed * 0.02 +
+            (100 - cloud_cover) * 0.15 +
+            season_bonus;
+
+    IF uv < 0 THEN
+        uv := 0;
+    END IF;
+
+    IF uv > 11 THEN
+        uv := 11;
+    END IF;
+
+    RETURN ROUND(uv::NUMERIC, 2);
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION auto_calculate_uv()
+    RETURNS TRIGGER AS $$
+BEGIN
+
+    NEW.uv_index :=
+            calculate_uv(
+                    (NEW.temperature_min + NEW.temperature_max)/2,
+                    NEW.humidity,
+                    NEW.wind_speed,
+                    20,
+                    'SUMMER'
+            );
+
+    RETURN NEW;
+
+END;
 $$ LANGUAGE plpgsql;
 
 --detectam anomalii
@@ -67,14 +121,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 ---comparam date vechi
-CREATE OR REPLACE FUNCTION compare_temperatures(city INT)
+CREATE OR REPLACE FUNCTION compare_temperatures(p_city_id INT)
 RETURNS TABLE(forecast_date DATE, avg_temp FLOAT) AS $$
 BEGIN
     RETURN QUERY
     SELECT wf.forecast_date, (temperature_min + temperature_max)/2
     FROM weather_forecasts AS wf
-    WHERE city_id = city
-    ORDER BY forecast_date;
+    WHERE wf.city_id = p_city_id
+    ORDER BY wf.forecast_date;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -131,7 +185,7 @@ CREATE  OR REPLACE FUNCTION rank_cities_by_average_temperature(
 )
 RETURNS TABLE(
     city_id INT,
-    city_name VARCHAR,
+    city_name TEXT,
     average_temperature NUMERIC
 )
 AS $$
@@ -150,6 +204,8 @@ BEGIN
 
 END;
 $$LANGUAGE plpgsql;
+
+
 
 
 ---procedura pt statistici orase
