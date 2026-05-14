@@ -2,6 +2,8 @@ package com.example.WeatherForecast.model;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class Forecast {
     private int id;
@@ -16,5 +18,5 @@ public class Forecast {
     private int uvIndex;
 
     private String weatherType;
-    private String forecastDate;
+    private LocalDate forecastDate;
 }

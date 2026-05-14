@@ -1,65 +1,109 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.CityStatistics;
 import lombok.AllArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @AllArgsConstructor
 public class StatisticsRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
     public List<CityStatistics> getAllStatistics() {
+
+        List<CityStatistics> statistics =
+                new ArrayList<>();
 
         String sql = """
                 SELECT *
                 FROM city_statistics
+                ORDER BY average_temperature DESC
                 """;
 
-        return jdbcTemplate.query(
-                sql,
+        try (
 
-                (rs, rowNum) -> {
+                Connection connection =
+                        dataSource.getConnection();
 
-                    CityStatistics s =
-                            new CityStatistics();
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(sql);
 
-                    s.setId(
-                            rs.getInt("id")
-                    );
+                ResultSet resultSet =
+                        preparedStatement.executeQuery();
 
-                    s.setCityId(
-                            rs.getInt("city_id")
-                    );
+        ) {
 
-                    s.setAverageTemperature(
-                            rs.getDouble("average_temperature")
-                    );
+            while (resultSet.next()) {
 
-                    s.setMinTemperature(
-                            rs.getDouble("min_temperature")
-                    );
+                CityStatistics s =
+                        new CityStatistics();
 
-                    s.setMaxTemperature(
-                            rs.getDouble("max_temperature")
-                    );
+                s.setId(
+                        resultSet.getInt("id")
+                );
 
-                    s.setAverageHumidity(
-                            rs.getDouble("average_humidity")
-                    );
+                s.setCityId(
+                        resultSet.getInt("city_id")
+                );
 
-                    s.setAverageWindSpeed(
-                            rs.getDouble("average_wind_speed")
-                    );
+                s.setAverageTemperature(
+                        resultSet.getDouble(
+                                "average_temperature"
+                        )
+                );
 
-                    return s;
-                }
-        );
+                s.setMinTemperature(
+                        resultSet.getDouble(
+                                "min_temperature"
+                        )
+                );
+
+                s.setMaxTemperature(
+                        resultSet.getDouble(
+                                "max_temperature"
+                        )
+                );
+
+                s.setAverageHumidity(
+                        resultSet.getDouble(
+                                "average_humidity"
+                        )
+                );
+
+                s.setAverageWindSpeed(
+                        resultSet.getDouble(
+                                "average_wind_speed"
+                        )
+                );
+
+                s.setGeneratedAt(
+                        resultSet
+                                .getTimestamp("generated_at")
+                                .toLocalDateTime()
+                );
+
+                statistics.add(s);
+            }
+
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to fetch statistics",
+                    e
+            );
+        }
+
+        return statistics;
     }
 
     public CityStatistics getStatisticsByCityId(
@@ -72,74 +116,87 @@ public class StatisticsRepository {
                 WHERE city_id = ?
                 """;
 
-        List<CityStatistics> result =
-                jdbcTemplate.query(
+        try (
 
-                        connection -> {
+                Connection connection =
+                        dataSource.getConnection();
 
-                            PreparedStatement ps =
-                                    connection.prepareStatement(sql);
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(sql);
 
-                            ps.setInt(1, cityId);
+        ) {
 
-                            return ps;
-                        },
+            preparedStatement.setInt(1, cityId);
 
-                        (rs, rowNum) -> {
+            try (
 
-                            CityStatistics s =
-                                    new CityStatistics();
+                    ResultSet resultSet =
+                            preparedStatement.executeQuery();
 
-                            s.setId(
-                                    rs.getInt("id")
-                            );
+            ) {
 
-                            s.setCityId(
-                                    rs.getInt("city_id")
-                            );
+                if(resultSet.next()) {
 
-                            s.setAverageTemperature(
-                                    rs.getDouble(
-                                            "average_temperature"
-                                    )
-                            );
+                    CityStatistics s =
+                            new CityStatistics();
 
-                            s.setMinTemperature(
-                                    rs.getDouble(
-                                            "min_temperature"
-                                    )
-                            );
+                    s.setId(
+                            resultSet.getInt("id")
+                    );
 
-                            s.setMaxTemperature(
-                                    rs.getDouble(
-                                            "max_temperature"
-                                    )
-                            );
+                    s.setCityId(
+                            resultSet.getInt("city_id")
+                    );
 
-                            s.setAverageHumidity(
-                                    rs.getDouble(
-                                            "average_humidity"
-                                    )
-                            );
+                    s.setAverageTemperature(
+                            resultSet.getDouble(
+                                    "average_temperature"
+                            )
+                    );
 
-                            s.setAverageWindSpeed(
-                                    rs.getDouble(
-                                            "average_wind_speed"
-                                    )
-                            );
-                            s.setGeneratedAt(
-                                    rs.getTimestamp("generated_at")
-                                            .toLocalDateTime()
-                            );
+                    s.setMinTemperature(
+                            resultSet.getDouble(
+                                    "min_temperature"
+                            )
+                    );
 
-                            return s;
-                        }
-                );
+                    s.setMaxTemperature(
+                            resultSet.getDouble(
+                                    "max_temperature"
+                            )
+                    );
 
-        if(result.isEmpty()) {
-            return null;
+                    s.setAverageHumidity(
+                            resultSet.getDouble(
+                                    "average_humidity"
+                            )
+                    );
+
+                    s.setAverageWindSpeed(
+                            resultSet.getDouble(
+                                    "average_wind_speed"
+                            )
+                    );
+
+                    s.setGeneratedAt(
+                            resultSet
+                                    .getTimestamp("generated_at")
+                                    .toLocalDateTime()
+                    );
+
+                    return s;
+                }
+
+            }
+
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to fetch city statistics",
+                    e
+            );
         }
 
-        return result.get(0);
+        return null;
     }
 }

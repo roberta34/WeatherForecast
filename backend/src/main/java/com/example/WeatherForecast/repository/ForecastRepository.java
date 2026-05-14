@@ -1,6 +1,7 @@
 package com.example.WeatherForecast.repository;
 
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.Forecast;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +11,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,17 +85,21 @@ public class ForecastRepository {
                         );
 
                         forecast.setForecastDate(
-                                resultSet.getString(
+                                resultSet.getDate(
                                         "forecast_date"
-                                )
+                                ).toLocalDate()
                         );
 
                         forecasts.add(forecast);
                     }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to fetch forecasts",
+                    e
+            );
         }
         return forecasts;
     }

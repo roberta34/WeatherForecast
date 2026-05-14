@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,7 @@ import javax.sql.XAConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentRepository {
     private final DataSource dataSource;
-    private final AbstractSwaggerWelcome abstractSwaggerWelcome;
 
     public void addComment(
             Integer userId,
@@ -45,8 +46,12 @@ public class CommentRepository {
             preparedStatement.setString(3, commentText);
 
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to add comment",
+                    e
+            );
         }
     }
 
@@ -115,8 +120,12 @@ public class CommentRepository {
                 comments.add(comment);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            throw new DatabaseException(
+                    "Failed to add comment",
+                    e
+            );
         }
         return comments;
     }

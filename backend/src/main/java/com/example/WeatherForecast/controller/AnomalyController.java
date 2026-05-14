@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/anomalies")
+@RequestMapping("/api/anomalies")
 @CrossOrigin("*")
 @AllArgsConstructor
 @Tag(name = "Weather Anomalies")

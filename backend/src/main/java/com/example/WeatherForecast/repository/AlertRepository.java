@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.Alert;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -69,7 +70,7 @@ public class AlertRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(
+            throw new DatabaseException(
                     "Failed to fetch alerts",
                     e
             );

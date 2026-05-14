@@ -320,3 +320,47 @@ BEGIN
     OR humidity >= 90;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION validate_temperature(
+    temp FLOAT
+)
+    RETURNS VOID AS $$
+BEGIN
+
+    IF temp > 70 THEN
+        RAISE EXCEPTION
+            'Temperature too high';
+    END IF;
+
+    IF temp < -100 THEN
+        RAISE EXCEPTION
+            'Temperature too low';
+    END IF;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION validate_humidity(
+    humidity_value FLOAT
+)
+    RETURNS VOID AS $$
+
+BEGIN
+
+    IF humidity_value < 0 THEN
+
+        RAISE EXCEPTION
+            'Humidity cannot be negative';
+
+    END IF;
+
+    IF humidity_value > 100 THEN
+
+        RAISE EXCEPTION
+            'Humidity cannot exceed 100 percent';
+
+    END IF;
+
+END;
+
+$$ LANGUAGE plpgsql;

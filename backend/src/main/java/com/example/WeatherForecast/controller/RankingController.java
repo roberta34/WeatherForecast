@@ -24,8 +24,8 @@ public class RankingController {
 
         return new ApiResponse<>(
                 "success",
-                "Rankings generated successfully",
-                null
+                null,
+                "Rankings generated successfully"
         );
     }
 
@@ -37,6 +37,41 @@ public class RankingController {
                 "success",
                 rankings,
                 "Rankings fetched successfully"
+        );
+    }
+
+    @GetMapping("/hottest")
+    public ApiResponse<List<CityRanking>>
+    getHottestCities() {
+
+        return new ApiResponse<>(
+                "success",
+                rankingService.getHottestCities(),
+                "Hottest cities fetched successfully"
+        );
+    }
+
+    @GetMapping("/coldest")
+    public ApiResponse<List<CityRanking>>
+    getColdestCities() {
+
+        return new ApiResponse<>(
+                "success",
+                rankingService.getColdestCities(),
+                "Coldest cities fetched successfully"
+        );
+    }
+
+    @GetMapping("/top/{limit}")
+    public ApiResponse<List<CityRanking>>
+    getTopRankings(
+            @PathVariable int limit
+    ) {
+
+        return new ApiResponse<>(
+                "success",
+                rankingService.getTopRankings(limit),
+                "Top rankings fetched successfully"
         );
     }
 }

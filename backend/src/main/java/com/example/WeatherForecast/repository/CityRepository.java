@@ -1,5 +1,6 @@
 package com.example.WeatherForecast.repository;
 
+import com.example.WeatherForecast.exception.DatabaseException;
 import com.example.WeatherForecast.model.City;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -62,7 +63,7 @@ public class CityRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(
+            throw new DatabaseException(
                     "Failed to fetch cities",
                     e
             );
