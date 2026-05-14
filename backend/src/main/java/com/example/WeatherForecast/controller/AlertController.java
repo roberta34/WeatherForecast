@@ -4,6 +4,7 @@ package com.example.WeatherForecast.controller;
 import com.example.WeatherForecast.dto.response.ApiResponse;
 import com.example.WeatherForecast.model.Alert;
 import com.example.WeatherForecast.service.AlertService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/alerts")
 @CrossOrigin("*")
 @AllArgsConstructor
+@Tag(name = "Alerts")
 public class AlertController {
     private final AlertService alertService;
 

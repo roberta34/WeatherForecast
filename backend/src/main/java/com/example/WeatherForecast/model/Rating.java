@@ -3,21 +3,24 @@ package com.example.WeatherForecast.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.relational.core.sql.In;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@Setter
 @Getter
-public class CityRanking {
+@Setter
+public class Rating {
     private Integer id;
+
+    private Integer userId;
+
+    private String username;
+
     private Integer cityId;
+
     private String cityName;
-    private String rankingType;
-    private Integer rankingPosition;
-    private Double score;
-    private LocalDateTime generatedAt;
 
+    private Integer ratingValue;
 
+    private LocalDateTime createdAt;
 }
