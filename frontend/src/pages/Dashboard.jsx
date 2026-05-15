@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import StatCard from "../components/StatCard";
 import AlertCard from "../components/AlertCard";
 import TopCities from "../components/TopCities";
+import Loading from "../components/Loading";
+import ErrorMessage from "../components/ErrorMessage";
 
 import {
     getOverview,
@@ -44,7 +46,7 @@ export default function Dashboard() {
                 await getTopCities();
 
             setOverview(
-                overviewResponse.data.data
+                overviewResponse.data.data[0]
             );
 
             setAlerts(
@@ -65,40 +67,55 @@ export default function Dashboard() {
 
     if (error) {
 
-        return <h2>{error}</h2>;
+        return (
+            <ErrorMessage
+                message={error}
+            />
+        );
     }
 
     if (!overview) {
 
-        return <h2>Loading...</h2>;
+        return <Loading />;
     }
 
     return (
 
         <div className="dashboard dashboard-page">
 
-            <h1>Weather Dashboard</h1>
+            <div className="dashboard-hero">
+
+                <h1>
+                    Weather Forecast Dashboard
+                </h1>
+
+                <p>
+                    Real-time weather statistics,
+                    alerts and city rankings.
+                </p>
+
+            </div>
 
             <div className="stats-grid">
 
                 <StatCard
                     title="Average Temp"
                     value={
-                        overview.averageTemperature
+                        `${overview.averageTemperature} °C`
                     }
                 />
 
                 <StatCard
-                    title="Hottest City"
+                    title="Max Temperature"
                     value={
-                        overview.hottestCity
+                        `${overview.maxTemperature} °C`
                     }
                 />
 
                 <StatCard
-                    title="Coldest City"
+                    title="Min Temperature"
                     value={
-                        overview.coldestCity
+                        `${overview.minTemperature} °C`
                     }
                 />
 

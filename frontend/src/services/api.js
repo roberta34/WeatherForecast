@@ -10,10 +10,13 @@ export const getForecastByCity = (cityId) =>
     API.get(`/forecast/${cityId}`);
 
 export const getOverview = () =>
-    API.get("/statistics/overview");
+    API.get("/statistics");
 
 export const getAlerts = (cityId) =>
     API.get(`/alerts/${cityId}`);
 
 export const getTopCities = () =>
     API.get("/ranking");
+
+export const getStatistics = () =>
+    API.get("/statistics");

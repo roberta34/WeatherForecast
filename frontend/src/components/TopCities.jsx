@@ -13,10 +13,14 @@ export default function TopCities({
                     className="city-card"
                 >
 
-                    <h3>{city.name}</h3>
+                    <h3>
+                        {city.rankingPosition}
+                        {" "}
+                        {city.cityName}
+                    </h3>
 
                     <p>
-                        {city.temperature}°C
+                        {city.score}°C
                     </p>
 
                 </div>

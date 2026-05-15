@@ -359,3 +359,39 @@ body {
     font-size: 18px;
   }
 }
+
+.dashboard-hero {
+  margin-bottom: 50px;
+}
+
+.dashboard-hero h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.dashboard-hero p {
+  color: #94a3b8;
+  font-size: 20px;
+}
+
+.analysis-box {
+  margin-top: 50px;
+
+  background: #111827;
+
+  padding: 35px;
+
+  border-radius: 20px;
+
+  line-height: 1.8;
+
+  color: white;
+
+  max-width: 1000px;
+}
+
+.analysis-box h2 {
+  margin-bottom: 20px;
+
+  color: #67e8f9;
+}
