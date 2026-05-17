@@ -364,3 +364,27 @@ BEGIN
 END;
 
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE public.generate_forecast(IN city integer)
+    LANGUAGE plpgsql
+AS $procedure$
+DECLARE
+    i INT;
+BEGIN
+    FOR i IN 1..7 LOOP
+            INSERT INTO weather_forecasts
+            (city_id, forecast_date, temperature_min, temperature_max, humidity, wind_speed, uv_index, weather_type)
+            VALUES
+                (
+                    city,
+                    CURRENT_DATE + i::INT,
+                    10 + random()*10,
+                    20 + random()*10,
+                    50 + random()*30,
+                    5 + random()*10,
+                    random()*10,
+                    'generated'
+                );
+        END LOOP;
+END;
+$procedure$
