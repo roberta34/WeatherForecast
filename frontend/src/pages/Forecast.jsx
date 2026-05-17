@@ -101,44 +101,54 @@ export default function Forecast() {
 
         <div className="forecast-page">
 
-            <h1>
-                Weather Forecast
-            </h1>
+            <div className="forecast-header">
 
-            <select
-                value={selectedCity}
-                onChange={handleCityChange}
-            >
+                <h1>
+                    Weather Forecast
+                </h1>
 
-                <option value="">
-                    Select a city
-                </option>
+                <p>
+                    Explore detailed weather forecasts for major European cities.
+                </p>
 
-                {cities.map((city) => (
+            </div>
 
-                    <option
-                        key={city.id}
-                        value={city.id}
-                    >
-                        {city.name}
+            <div className="forecast-controls">
+
+                <select
+                    value={selectedCity}
+                    onChange={handleCityChange}
+                    className="city-select"
+                >
+
+                    <option value="">
+                        Select a city
                     </option>
 
-                ))}
+                    {cities.map((city) => (
 
-            </select>
+                        <option
+                            key={city.id}
+                            value={city.id}
+                        >
+                            {city.name}
+                        </option>
 
-            {selectedCity && (
+                    ))}
 
-                <div className="details-link">
+                </select>
+
+                {selectedCity && (
 
                     <Link
                         to={`/city/${selectedCity}`}
+                        className="details-button"
                     >
                         View City Details
                     </Link>
+                )}
 
-                </div>
-            )}
+            </div>
 
             {loading && <Loading />}
 

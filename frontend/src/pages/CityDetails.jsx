@@ -97,10 +97,19 @@ export default function CityDetails() {
         return <h2>Loading city data...</h2>;
     }
 
+    const today = new Date()
+        .toISOString()
+        .split("T")[0];
+
+    const latestForecast =
+        forecast.find(
+            (f) => f.forecastDate === today
+        ) || forecast[0];
+
     const data = {
 
         labels: forecast.map(
-            (f) => f.date
+            (f) => f.forecastDate
         ),
 
         datasets: [
@@ -110,7 +119,7 @@ export default function CityDetails() {
                     "Max Temperature",
 
                 data: forecast.map(
-                    (f) => f.temperatureMax
+                    (f) => f.maxTemperature
                 ),
 
                 borderColor: "cyan",
@@ -126,7 +135,7 @@ export default function CityDetails() {
                     "Min Temperature",
 
                 data: forecast.map(
-                    (f) => f.temperatureMin
+                    (f) => f.minTemperature
                 ),
 
                 borderColor: "orange",
@@ -139,9 +148,6 @@ export default function CityDetails() {
         ]
     };
 
-    const latestForecast =
-        forecast[forecast.length - 1];
-
     return (
 
         <div className="statistics-page">
@@ -152,7 +158,64 @@ export default function CityDetails() {
 
             <div className="chart-container">
 
-                <Line data={data} />
+                <Line
+                    data={data}
+
+                    options={{
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                labels: {
+
+                                    color: "white",
+
+                                    font: {
+                                        size: 16
+                                    }
+                                }
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                ticks: {
+
+                                    color: "white",
+
+                                    maxRotation: 45,
+
+                                    minRotation: 45
+                                },
+
+                                grid: {
+
+                                    color: "rgba(255,255,255,0.05)"
+                                }
+                            },
+
+                            y: {
+
+                                ticks: {
+
+                                    color: "white"
+                                },
+
+                                grid: {
+
+                                    color: "rgba(255,255,255,0.05)"
+                                }
+                            }
+                        }
+                    }}
+                />
 
             </div>
 
@@ -165,17 +228,17 @@ export default function CityDetails() {
                     </h3>
 
                     <p>
-                        <p>
 
-                            {latestForecast.weatherType === "sunny" && "☀️ Sunny"}
+                        {latestForecast.weatherType?.toLowerCase() === "sunny" && "☀️ Sunny"}
 
-                            {latestForecast.weatherType === "rain" && "🌧 Rain"}
+                        {latestForecast.weatherType?.toLowerCase() === "rain" && "🌧 Rain"}
 
-                            {latestForecast.weatherType === "snow" && "❄️ Snow"}
+                        {latestForecast.weatherType?.toLowerCase() === "snow" && "❄️ Snow"}
 
-                            {latestForecast.weatherType === "cloudy" && "☁️ Cloudy"}
+                        {latestForecast.weatherType?.toLowerCase() === "cloudy" && "☁️ Cloudy"}
 
-                        </p>
+                        {latestForecast.weatherType?.toLowerCase() === "storm" && "⛈ Storm"}
+
                     </p>
 
                 </div>

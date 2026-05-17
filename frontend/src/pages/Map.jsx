@@ -92,27 +92,17 @@ export default function MapPage() {
         }
     }
 
-    function getStatisticsForCity(cityId) {
-
-        return statistics.find(
-            (s) => s.cityId === cityId
-        );
-    }
-
-    if(loading) {
+    if (loading) {
 
         return <h2>Loading map...</h2>;
     }
 
-    if(error) {
+    if (error) {
 
         return <h2>{error}</h2>;
     }
 
-    console.log(cities);
-    console.log(statistics);
     return (
-
 
         <div className="map-page">
 
@@ -121,12 +111,13 @@ export default function MapPage() {
             </h1>
 
             <MapContainer
-                center={[50.1109, 8.6821]}
+                center={[50, 10]}
                 zoom={4}
                 scrollWheelZoom={true}
                 style={{
                     height: "700px",
-                    width: "100%"
+                    width: "100%",
+                    borderRadius: "20px"
                 }}
             >
 
@@ -137,16 +128,14 @@ export default function MapPage() {
 
                 {cities
                     .filter((city) =>
-                        city.latitude !== null &&
-                        city.longitude !== null &&
-                        city.latitude !== undefined &&
-                        city.longitude !== undefined
+                        city.latitude &&
+                        city.longitude
                     )
                     .map((city) => {
 
                         const stats =
-                            getStatisticsForCity(
-                                city.id
+                            statistics.find(
+                                (s) => s.cityId === city.id
                             );
 
                         return (
@@ -154,9 +143,34 @@ export default function MapPage() {
                             <Marker
                                 key={city.id}
                                 position={[
-                                    parseFloat(city.latitude),
-                                    parseFloat(city.longitude)
+                                    Number(city.latitude),
+                                    Number(city.longitude)
                                 ]}
+
+                                icon={L.divIcon({
+
+                                    className:
+                                        "custom-weather-marker",
+
+                                    html: `
+                                        <div class="weather-marker">
+
+                                            <div class="temp-badge">
+                                                ${stats?.averageTemperature
+                                        ? `${stats.averageTemperature}°C`
+                                        : "N/A"}
+                                            </div>
+
+                                            <div class="city-label">
+                                                ${city.name}
+                                            </div>
+
+                                        </div>
+                                    `,
+
+                                    iconSize: [120, 60],
+                                    iconAnchor: [60, 30]
+                                })}
                             >
 
                                 <Popup>

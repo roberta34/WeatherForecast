@@ -23,3 +23,4 @@ export const getStatistics = () =>
 
 export const getCityForecast = (cityId) =>
     API.get(`/forecast/${cityId}`)
+

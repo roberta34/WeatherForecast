@@ -39,8 +39,24 @@ export default function Dashboard() {
             const overviewResponse =
                 await getOverview();
 
-            const alertsResponse =
-                await getAlerts(1);
+            const cityIds = [
+                1,2,3,4,5,
+                6,7,8,9,10,
+                11,12,13,14,15
+            ];
+
+            const alertsPromises =
+                cityIds.map((id) => getAlerts(id));
+
+            const alertsResponses =
+                await Promise.all(alertsPromises);
+
+            const allAlerts =
+                alertsResponses.flatMap(
+                    (response) => response.data.data
+                );
+
+            console.log(allAlerts);
 
             const citiesResponse =
                 await getTopCities();
@@ -49,9 +65,7 @@ export default function Dashboard() {
                 overviewResponse.data.data[0]
             );
 
-            setAlerts(
-                alertsResponse.data.data
-            );
+            setAlerts(allAlerts);
 
             setTopCities(
                 citiesResponse.data.data
@@ -129,7 +143,9 @@ export default function Dashboard() {
 
                     <AlertCard
                         key={alert.id}
-                        message={alert.message}
+                        message={
+                            alert.message
+                        }
                     />
 
                 ))}

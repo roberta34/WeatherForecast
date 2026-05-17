@@ -15,7 +15,7 @@ export default function TopCities({
 
                     <h3>
                         {city.rankingPosition}
-                        {" "}
+                        {". "}
                         {city.cityName}
                     </h3>
 
