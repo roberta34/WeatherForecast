@@ -1,233 +1,183 @@
 # PrognozaMeteo
-# Sistem de Prognoză Meteo
 
-## Descriere generală
+Aplicație web (full‑stack) pentru prognoze meteo la nivel de oraș, statistici/rapoarte și funcționalități de analiză (alerte, anomalii, clasamente), construită cu **Spring Boot + PostgreSQL + React**.
 
-Acest proiect reprezintă o aplicație web completă pentru gestionarea și analiza prognozelor meteo pentru orașe din Europa și din lume. Sistemul permite generarea de rapoarte meteo zilnice, statistici complexe și previziuni pe termen scurt, utilizând o bază de date relațională și algoritmi implementați la nivel de server.
+## Cuprins
 
-Aplicația este construită folosind:
+- [Stack tehnologic](#stack-tehnologic)
+- [Funcționalități](#funcționalități)
+- [Cerințe](#cerințe)
+- [Configurare bază de date](#configurare-bază-de-date)
+- [Rulare aplicație (Windows / PowerShell)](#rulare-aplicație-windows--powershell)
+- [Configurare](#configurare)
+- [API (endpoints)](#api-endpoints)
+- [Structura proiectului](#structura-proiectului)
+- [Troubleshooting](#troubleshooting)
 
-* **Backend:** Spring Boot (Java)
-* **Bază de date:** PostgreSQL (cu PL/pgSQL)
-* **Frontend:** React
+## Stack tehnologic
 
+- **Backend:** Spring Boot (Java), API REST
+- **Bază de date:** PostgreSQL (SQL + PL/pgSQL: funcții/proceduri/triggere)
+- **Frontend:** React (Create React App) + Axios
 
----
+## Funcționalități
 
-## Funcționalități principale
+- Prognoze meteo per oraș (min/max, umiditate, vânt, UV, tip de vreme)
+- Alerte meteo (generate pe baza condițiilor extreme)
+- Statistici pe oraș + statistici globale
+- Detectare anomalii meteo
+- Comentarii și rating-uri (feedback utilizatori)
+- Clasamente / ranking (inclusiv top cele mai calde/reci orașe)
 
-### Prognoză Meteo
+## Cerințe
 
-* Generarea prognozei meteo pentru fiecare zi dintr-un an calendaristic
-* Vizualizarea datelor pentru fiecare oraș:
+- **Java** (recomandat: LTS instalat) + Maven Wrapper (inclus în proiect)
+- **Node.js** + **npm** (pentru frontend)
+- **PostgreSQL** (local)
 
-  * temperatură minimă și maximă
-  * viteză vânt
-  * umiditate
-  * index UV
-  * tip de vreme (pictograme: soare, ploaie, ninsoare etc.)
-* Organizarea datelor pe țări și orașe
+Porturi implicite în acest proiect:
 
----
+- Backend: `http://localhost:8085`
+- Frontend: `http://localhost:3000`
 
-### Alerte Meteo Inteligente
+## Configurare bază de date
 
-* Generare automată de alerte în funcție de condiții extreme:
+Scripturile DB sunt în folderul [`database/`](./database):
 
-  * vânt puternic
-  * umiditate ridicată
-  * temperaturi extreme
-* Recomandări pentru utilizatori:
+- `schema.sql`
+- `populate.sql`
+- `functions.sql`
+- `triggers.sql`
 
-  * evitarea deplasărilor
-  * utilizarea umbrelei
-  * alte sugestii utile
+1) Creează baza de date:
 
----
-
-### Statistici și Analize
-
-* Calculul temperaturilor medii (zilnic, lunar, anual)
-* Identificarea valorilor extreme
-* Detectarea anomaliilor meteorologice
-* Analiza evoluției vremii pentru un oraș
-
----
-
-### Funcționalități Avansate
-
-* Previziuni pe termen scurt (7–10 zile)
-* Compararea prognozelor:
-
-  * între ani diferiți
-  * între sezoane
-* Clasificarea orașelor în funcție de condițiile meteo
-* Generarea de grafice pentru evoluția temperaturii
-
----
-
-### Interacțiune utilizatori
-
-* Comentarii asupra prognozelor
-* Evaluarea acurateței prognozelor (rating)
-* Sistem de scor bazat pe feedback-ul utilizatorilor
-
----
-
-### Interfață grafică
-
-* Vizualizarea prognozelor într-o interfață modernă
-* Hartă cu temperaturi minime și maxime pentru orașe importante
-* Grafice interactive pentru analiza datelor
-
----
-
-## Tehnologii utilizate
-
-### Backend (Spring Boot)
-
-* Java
-* Spring Web
-* Spring JDBC (fără ORM)
-* Expunere API REST
-
-### Bază de date (PostgreSQL)
-
-* SQL + PL/pgSQL
-* Proceduri stocate
-* Funcții
-* Triggere
-* Secvențe
-
-### Frontend (React)
-
-* React.js
-* Axios pentru API calls
-* CSS / Bootstrap / Material UI (opțional)
-
----
-
-## 🗄️ Structura bazei de date
-
-Aplicația include următoarele entități principale:
-
-* `countries` – lista țărilor
-* `cities` – orașe asociate țărilor
-* `weather_forecasts` – prognoze zilnice
-* `weather_alerts` – alerte meteo
-* `users` – utilizatori
-* `comments` – comentarii utilizatori
-* `ratings` – evaluări ale prognozelor
-* `forecast_history` – istoric prognoze (pentru comparații)
-
----
-
-## Setup și instalare
-
-### Configurarea bazei de date
-
-Asigurați-vă că PostgreSQL este instalat și pornit.
-
-Creați baza de date:
-
-```sql id="db_create"
+```sql
 CREATE DATABASE weather_db;
 ```
 
-Rulați scripturile:
+2) Rulează scripturile (în `psql`, din rădăcina repo‑ului):
 
-```sql id="db_schema"
-\i schema.sql
+```sql
+\i database/schema.sql
+\i database/functions.sql
+\i database/triggers.sql
+\i database/populate.sql
 ```
 
-```sql id="db_populate"
-\i populate.sql
+## Rulare aplicație (Windows / PowerShell)
+
+### 1) Backend (Spring Boot)
+
+Din rădăcina repo‑ului:
+
+```powershell
+cd .\backend
+.\mvnw.cmd spring-boot:run
 ```
 
----
+Backend-ul pornește pe `http://localhost:8085` (configurat în `application.properties`).
 
-### Configurarea backend-ului (Spring Boot)
+### 2) Frontend (React)
 
-```bash id="backend_run"
-cd backend
-./mvnw spring-boot:run
-```
+În alt terminal:
 
-Configurați conexiunea în `application.properties`:
-
-```properties id="props"
-spring.datasource.url=jdbc:postgresql://localhost:5432/weather_db
-spring.datasource.username=postgres
-spring.datasource.password=parola
-```
-
----
-
-### Configurarea frontend-ului (React)
-
-```bash id="frontend_run"
-cd frontend
+```powershell
+cd .\frontend
 npm install
 npm start
 ```
 
----
+Aplicația este disponibilă la `http://localhost:3000`.
 
-## Rulare aplicație
+## Configurare
 
-1. Porniți PostgreSQL
-2. Rulați backend-ul Spring Boot
-3. Rulați frontend-ul React
-4. Accesați aplicația la:
+### Backend
+
+Fișier: [`backend/src/main/resources/application.properties`](./backend/src/main/resources/application.properties)
+
+Valorile curente (development local):
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/weather_db
+spring.datasource.username=postgres
+spring.datasource.password=roberta
+server.port=8085
+```
+
+### Frontend
+
+Fișier: [`frontend/src/services/api.js`](./frontend/src/services/api.js)
+
+Aplicatia folosește:
+
+- `baseURL: http://localhost:8085/api`
+
+Dacă schimbi portul backend‑ului, actualizează `baseURL`.
+
+## API Endpoints
+
+Prefix comun: `http://localhost:8085/api`
+
+### Orașe
+
+- `GET /cities` – listă orașe
+
+### Prognoză
+
+- `GET /forecast/{cityId}` – prognoză pentru un oraș
+
+### Alerte
+
+- `GET /alerts/{cityId}` – alerte pentru un oraș
+
+### Statistici
+
+- `GET /statistics` – toate statisticile
+- `GET /statistics/{cityId}` – statistici pentru un oraș
+
+### Anomalii
+
+- `POST /anomalies/detect` – rulează detectarea anomaliilor
+- `GET /anomalies` – listă anomalii
+
+### Comentarii
+
+- `POST /comments` – adaugă comentariu
+- `GET /comments` – listă comentarii
+
+### Rating-uri
+
+- `POST /ratings` – adaugă rating
+- `GET /ratings` – listă rating-uri
+
+### Ranking (clasamente)
+
+- `POST /ranking/generate` – generează clasamente
+- `GET /ranking` – listă clasamente
+- `GET /ranking/hottest` – cele mai calde orașe
+- `GET /ranking/coldest` – cele mai reci orașe
+- `GET /ranking/top/{limit}` – top N
+
+### Swagger / OpenAPI
+
+Proiectul folosește adnotări OpenAPI (ex. `@Tag`, `@Operation`). Dacă dependența Swagger/OpenAPI este activă în backend, interfața este de obicei disponibilă la una dintre adrese:
+
+- `http://localhost:8085/swagger-ui.html`
+- `http://localhost:8085/swagger-ui/index.html`
+
+## Structura proiectului
 
 ```
-http://localhost:3000
+PrognozaMeteo/
+  backend/    # Spring Boot (API REST)
+  frontend/   # React (UI)
+  database/   # schema + populate + functions + triggers
+  docs/       # documentație (dacă există)
 ```
 
----
+## Troubleshooting
 
-## API Endpoints (exemple)
-
-### Forecast
-
-* `GET /api/forecast/{cityId}`
-* `POST /api/forecast`
-
-### Cities
-
-* `GET /api/cities`
-
-### Alerts
-
-* `GET /api/alerts/{cityId}`
-
-### Statistics
-
-* `GET /api/statistics/{cityId}`
-
----
-
-## Funcționalități avansate în baza de date
-
-* Calcul automat al indexului UV
-* Generare automată de alerte (triggere)
-* Funcții pentru:
-
-  * temperatură medie
-  * clasificare orașe
-  * detectare anomalii
-* Proceduri pentru prognoze pe mai multe zile
-
----
-
-## Tratarea excepțiilor
-
-Aplicația tratează:
-
-* erori de conexiune la baza de date
-* date invalide
-* excepții generate de proceduri PL/pgSQL
-
----
-
-
+- **Eroare CORS / nu se conectează frontend-ul la backend:** verifică portul backend (`8085`) și `baseURL` din `frontend/src/services/api.js`.
+- **Port ocupat:** schimbă `server.port` în `backend/.../application.properties` și actualizează `baseURL` în frontend.
+- **DB auth failed:** actualizează `spring.datasource.username/password` sau crează user-ul în PostgreSQL.
+- **Baza de date goală:** rulează și `database/populate.sql` după `schema.sql`.
