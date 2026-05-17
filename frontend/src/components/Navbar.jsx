@@ -22,6 +22,10 @@ export default function Navbar() {
                     Statistics
                 </Link>
 
+                <Link to="/map">
+                    Map
+                </Link>
+
             </div>
 
         </nav>

@@ -20,3 +20,6 @@ export const getTopCities = () =>
 
 export const getStatistics = () =>
     API.get("/statistics");
+
+export const getCityForecast = (cityId) =>
+    API.get(`/forecast/${cityId}`)

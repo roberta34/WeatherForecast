@@ -395,3 +395,54 @@ body {
 
   color: #67e8f9;
 }
+
+.forecast-grid {
+  display: grid;
+
+  grid-template-columns:
+      repeat(auto-fit, minmax(320px, 1fr));
+
+  gap: 30px;
+
+  margin-top: 40px;
+}
+
+.details-link {
+  margin-top: 20px;
+}
+
+.details-link a {
+  color: #67e8f9;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+  font-size: 18px;
+}
+
+.details-link a:hover {
+  color: white;
+}
+
+.map-page {
+  padding: 40px;
+
+  background: #0f172a;
+
+  min-height: 100vh;
+
+  color: white;
+}
+
+.leaflet-container {
+  height: 700px;
+
+  width: 100%;
+
+  border-radius: 20px;
+}
+
+.leaflet-popup-content {
+  color: black;
+}

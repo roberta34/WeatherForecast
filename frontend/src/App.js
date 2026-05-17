@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-
+import MapPage from "./pages/Map";
 import Dashboard from "./pages/Dashboard";
 import Forecast from "./pages/Forecast";
 import Statistics from "./pages/Statistics";
@@ -41,6 +41,11 @@ function App() {
                 <Route
                     path="/city/:id"
                     element={<CityDetails />}
+                />
+
+                <Route
+                    path="/map"
+                    element={<MapPage />}
                 />
 
             </Routes>
