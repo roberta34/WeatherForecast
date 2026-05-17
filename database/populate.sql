@@ -1,3 +1,4 @@
+
 ---countries
 
 INSERT INTO countries(name, code) VALUES
@@ -54,6 +55,8 @@ INSERT INTO users (username, email, password_hash) VALUES
                                                        ('user15', 'user15@mail.com', 'pass');
 
 
+
+
 ---weather forecasts
 INSERT INTO weather_forecasts
 (city_id, forecast_date, temperature_min, temperature_max, humidity, wind_speed, uv_index, weather_type)
@@ -75,20 +78,139 @@ VALUES
     (15, '2025-05-01', 7, 16, 75, 13, 3, 'cloudy');
 
 
+
+TRUNCATE TABLE
+    weather_anomalies,
+    forecast_logs,
+    weather_alerts,
+    city_statistics,
+    seasonal_analysis,
+    city_rankings,
+    weather_forecasts
+    RESTART IDENTITY CASCADE;
+
+INSERT INTO weather_forecasts
+(
+    city_id,
+    forecast_date,
+    temperature_min,
+    temperature_max,
+    humidity,
+    wind_speed,
+    uv_index,
+    weather_type
+)
+
+SELECT
+    c.id,
+    d::date,
+    ROUND(
+            (
+                random() * 15
+                )::numeric,
+            1
+    ),
+    ROUND(
+            (
+                random() * 20 + 15
+                )::numeric,
+            1
+    ),
+    ROUND(
+            (
+                random() * 50 + 40
+                )::numeric,
+            1
+    ),
+    ROUND(
+            (
+                random() * 15 + 5
+                )::numeric,
+            1
+    ),
+    ROUND(
+            (
+                random() * 10
+                )::numeric,
+            1
+    ),
+    CASE
+        WHEN random() < 0.20
+            THEN 'rain'
+
+        WHEN random() < 0.40
+            THEN 'cloudy'
+
+        WHEN random() < 0.60
+            THEN 'sunny'
+
+        WHEN random() < 0.80
+            THEN 'storm'
+
+        ELSE 'snow'
+        END
+
+FROM cities c,
+
+     generate_series
+     (
+             '2025-01-01'::date,
+             '2025-12-31'::date,
+             interval '1 day'
+     ) d;
+
+
+
+CALL generate_city_statistics();
+
+CALL generate_seasonal_analysis();
+
+CALL generate_city_rankings();
+
+CALL detect_weather_anomalies();
+
 ---weather alerts
-INSERT INTO weather_alerts (city_id, alert_type, description, severity) VALUES
-                                                                            (1, 'heat', 'High temperature warning', 'medium'),
-                                                                            (2, 'wind', 'Strong winds expected', 'high'),
-                                                                            (3, 'rain', 'Heavy rain alert', 'high'),
-                                                                            (4, 'uv', 'High UV index', 'medium'),
-                                                                            (5, 'heat', 'Extreme heat', 'high'),
-                                                                            (6, 'fog', 'Low visibility', 'low'),
-                                                                            (7, 'storm', 'Storm incoming', 'high'),
-                                                                            (8, 'snow', 'Snowfall warning', 'medium'),
-                                                                            (9, 'rain', 'Flood risk', 'high'),
-                                                                            (10, 'wind', 'Wind gusts', 'medium'),
-                                                                            (11, 'heat', 'Hot weather', 'low'),
-                                                                            (12, 'uv', 'UV risk', 'medium'),
-                                                                            (13, 'snow', 'Heavy snow', 'high'),
-                                                                            (14, 'ice', 'Ice on roads', 'high'),
-                                                                            (15, 'rain', 'Persistent rain', 'medium');
+    INSERT INTO weather_alerts (city_id, alert_type, description, severity) VALUES
+                                                                                (1, 'heat', 'High temperature warning', 'medium'),
+                                                                                (2, 'wind', 'Strong winds expected', 'high'),
+                                                                                (3, 'rain', 'Heavy rain alert', 'high'),
+                                                                                (4, 'uv', 'High UV index', 'medium'),
+                                                                                (5, 'heat', 'Extreme heat', 'high'),
+                                                                                (6, 'fog', 'Low visibility', 'low'),
+                                                                                (7, 'storm', 'Storm incoming', 'high'),
+                                                                                (8, 'snow', 'Snowfall warning', 'medium'),
+                                                                                (9, 'rain', 'Flood risk', 'high'),
+                                                                                (10, 'wind', 'Wind gusts', 'medium'),
+                                                                                (11, 'heat', 'Hot weather', 'low'),
+                                                                                (12, 'uv', 'UV risk', 'medium'),
+                                                                                (13, 'snow', 'Heavy snow', 'high'),
+                                                                                (14, 'ice', 'Ice on roads', 'high'),
+                                                                                (15, 'rain', 'Persistent rain', 'medium');
+
+INSERT INTO weather_alerts (
+    city_id,
+    alert_type,
+    description,
+    severity
+)
+VALUES
+    (1, 'storm', 'Thunderstorm expected during evening hours', 'high'),
+    (2, 'fog', 'Dense fog reducing visibility in the morning', 'medium'),
+    (3, 'snow', 'Snow accumulation expected overnight', 'high'),
+    (4, 'heat', 'Extreme afternoon temperatures detected', 'high'),
+    (5, 'uv', 'Very high UV radiation expected', 'medium'),
+    (6, 'wind', 'Strong coastal winds expected', 'high'),
+    (7, 'rain', 'Heavy rainfall may cause local flooding', 'high'),
+    (8, 'ice', 'Road icing risk during nighttime', 'medium'),
+    (9, 'storm', 'Electrical storm warning active', 'high'),
+    (10, 'fog', 'Low visibility conditions on highways', 'low'),
+    (11, 'heat', 'Heat discomfort possible during midday', 'medium'),
+    (12, 'wind', 'Wind gusts above seasonal average', 'medium'),
+    (13, 'snow', 'Blizzard conditions possible', 'critical'),
+    (14, 'ice', 'Black ice detected on major roads', 'high'),
+    (15, 'rain', 'Continuous rainfall expected for 24 hours', 'medium'),
+    (1, 'uv', 'UV exposure risk at noon', 'low'),
+    (2, 'storm', 'Storm front approaching city area', 'high'),
+    (3, 'wind', 'Powerful winds expected overnight', 'medium'),
+    (4, 'rain', 'Heavy showers forecasted', 'medium'),
+    (5, 'heat', 'Temperature may exceed 38°C', 'critical');
