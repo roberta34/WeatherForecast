@@ -1,48 +1,79 @@
 import { useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
     getCities,
     getForecastByCity
 } from "../services/api";
 
-import ForecastCard from "../components/ForecastCard";
-import Loading from "../components/Loading";
-import ErrorMessage from "../components/ErrorMessage";
+import ForecastCard
+    from "../components/ForecastCard";
+
+import Loading
+    from "../components/Loading";
+
+import ErrorMessage
+    from "../components/ErrorMessage";
 
 export default function Forecast() {
-    const [cities, setCities] = useState([]);
 
-    const [selectedCity, setSelectedCity] = useState("");
+    const [cities, setCities] =
+        useState([]);
 
-    const [forecasts, setForecasts] = useState([]);
+    const [selectedCity, setSelectedCity] =
+        useState("");
 
-    const [loading, setLoading] = useState(false);
+    const [forecasts, setForecasts] =
+        useState([]);
 
-    const [error, setError] = useState("");
+    const [loading, setLoading] =
+        useState(false);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
+
         loadCities();
+
     }, []);
 
     async function loadCities() {
+
         try {
-            const response = await getCities();
-            setCities(response.data.data);
+
+            const response =
+                await getCities();
+
+            setCities(
+                response.data.data
+            );
+
         } catch (err) {
-            setError("Failed to load cities.");
+
+            setError(
+                "Failed to load cities."
+            );
         }
     }
 
     async function handleCityChange(event) {
-        const cityId = event.target.value;
+
+        const cityId =
+            event.target.value;
 
         setSelectedCity(cityId);
 
-        if(!cityId) {
+        if (!cityId) {
+
+            setForecasts([]);
+
             return;
         }
 
         try {
+
             setLoading(true);
 
             setError("");
@@ -50,54 +81,97 @@ export default function Forecast() {
             const response =
                 await getForecastByCity(cityId);
 
-            setForecasts(response.data.data);
+            setForecasts(
+                response.data.data
+            );
+
         } catch (err) {
-            setError("Failed to load forecasts.");
+
+            setError(
+                "Failed to load forecasts."
+            );
+
         } finally {
+
             setLoading(false);
         }
     }
 
     return(
+
         <div className="forecast-page">
-            <h1>Weather Forecast</h1>
 
-            <select
-                value={selectedCity}
-                onChange={handleCityChange}
-            >
-                <option value="">
-                    Select a city
-                </option>
+            <div className="forecast-header">
 
-                {cities.map((city) => (
-                    <option
-                        key={city.id}
-                        value={city.id}
-                    >
-                        {city.name}
+                <h1>
+                    Weather Forecast
+                </h1>
+
+                <p>
+                    Explore detailed weather forecasts for major European cities.
+                </p>
+
+            </div>
+
+            <div className="forecast-controls">
+
+                <select
+                    value={selectedCity}
+                    onChange={handleCityChange}
+                    className="city-select"
+                >
+
+                    <option value="">
+                        Select a city
                     </option>
-                    )
+
+                    {cities.map((city) => (
+
+                        <option
+                            key={city.id}
+                            value={city.id}
+                        >
+                            {city.name}
+                        </option>
+
+                    ))}
+
+                </select>
+
+                {selectedCity && (
+
+                    <Link
+                        to={`/city/${selectedCity}`}
+                        className="details-button"
+                    >
+                        View City Details
+                    </Link>
                 )}
-            </select>
+
+            </div>
 
             {loading && <Loading />}
 
             {error && (
-                <ErrorMessage message={error} />
+
+                <ErrorMessage
+                    message={error}
+                />
             )}
 
-            <div className="forecast-list">
+            <div className="forecast-grid">
 
                 {forecasts.map((forecast) => (
+
                     <ForecastCard
                         key={forecast.id}
                         forecast={forecast}
                     />
-                    )
-                )}
+
+                ))}
 
             </div>
+
         </div>
     );
 }
